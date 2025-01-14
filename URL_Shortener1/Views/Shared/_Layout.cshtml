@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model URL_Shortener1.Models.User;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,11 +14,19 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">URL_Shortener1</a>
+                <a class="navbar-brand" asp-controller="ShortURLsTable" asp-action="ShortURLsTableView">URL_Shortener</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
+                <form method="get">
+                    <button asp-controller="Account" asp-action="Login">Login</button>
+                </form>
+
+                @* @if (User.Identity.IsAuthenticated) {
+
+                } *@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -38,7 +48,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - URL_Shortener1 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2025 - URL_Shortener1 - <a asp-controller="ShortURLsTable" asp-action="AboutView">About</a>
         </div>
     </footer>
 

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<URL_Shortener1.Models.URL>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<p> 
+    <form method="post">
+        <button asp-controller="Home" asp-action="Index">Click</button>
+    </form>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OriginalUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShortenedUrl)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model is not null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OriginalUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShortenedUrl)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+        }
+}
+    </tbody>
+</table>

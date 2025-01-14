@@ -13,7 +13,7 @@ namespace URL_Shortener1.Models
 
         [ForeignKey("User")]
         public int UserId { get; set; }
-        public int CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }         // remake migrations
         public User? User { get; set; }
     }
 
