@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using URL_Shortener1.Models;
 
 namespace URL_Shortener1.DBContext
 {
-    public class ApplicationDBContext : DbContext
+    public class ApplicationDBContext : IdentityDbContext<User>
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<URL> URLs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
