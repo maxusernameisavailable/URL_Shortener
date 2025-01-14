@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="DB\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
