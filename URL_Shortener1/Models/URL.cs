@@ -1,13 +1,20 @@
-﻿namespace URL_Shortener1.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace URL_Shortener1.Models
 {
     public class URL
     {
+        [Key]
         public int Id { get; set; }
-        public string OriginalUrl { get; set; }
+        public string? OriginalUrl { get; set; }
 
-        public string ShortenedUrl { get; set; }
-        public int CreatedBy { get; set; }
+        public string? ShortenedUrl { get; set; }
+
+        [ForeignKey("User")]
+        public int UserId { get; set; }
         public int CreatedDate { get; set; }
+        public User? User { get; set; }
     }
 
 }
