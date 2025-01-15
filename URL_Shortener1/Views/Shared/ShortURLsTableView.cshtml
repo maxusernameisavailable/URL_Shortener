@@ -4,14 +4,12 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <form id="shortenForm">
-        <input type="text" id="longUrl" placeholder="Введіть URL" required />
+    <form asp-action="ShortenUrl" method="post">
+        <input type="text" name="LongUrl" id="longUrl" placeholder="Введіть URL" required />
         <button type="submit">Скоротити</button>
     </form>
     <p id="message" style="color: red; display: none;">URL не може бути порожнім.</p>
 }
-
-@* remake with geturls *@
 
 <table class="table">
     <thead>
@@ -22,11 +20,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.ShortenedUrl)
             </th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th>
+                    Actions
+                </th>
+            }
         </tr>
     </thead>
     <tbody>
-        @if(Model is not null)
-        {
+        @if (Model is not null) {
             @foreach (var item in Model)
             {
                 <tr>
@@ -36,13 +39,16 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ShortenedUrl)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                           <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    }
                 </tr>
+            }
         }
-}
     </tbody>
 </table>

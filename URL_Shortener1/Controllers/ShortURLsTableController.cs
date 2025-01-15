@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using URL_Shortener1.Models;
 using URL_Shortener1.Services;
+using URL_Shortener1.ViewModels;
 
 namespace URL_Shortener1.Controllers
 {
@@ -16,9 +17,18 @@ namespace URL_Shortener1.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
         public IActionResult ShortURLsTableView()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = _userManager.GetUserId(User);
+                var userUrls = _urlService.GetUserUrls(userId);
+                return View(userUrls);
+            }
+
+            var urls = _urlService.GetUrls();
+            return View(urls);
         }
 
         public IActionResult AboutView()
@@ -27,16 +37,16 @@ namespace URL_Shortener1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ShortenUrl(string longUrl)
+        public async Task<IActionResult> ShortenUrl(UrlViewModel model)
         {
-            var userId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(longUrl))
+            if (ModelState.IsValid)
             {
-                BadRequest();
+                var userId = _userManager.GetUserId(User);
+                var url = await _urlService.ShortenUrlAsync(model.LongUrl, userId);
+                return RedirectToAction("ShortURLsTableView", "ShortURLsTable");
             }
 
-            var url = await _urlService.ShortenUrlAsync(longUrl, userId);
-            return Json(url);
+            return View("ShortURLsTableView");
         }
 
 /*        [HttpPost]

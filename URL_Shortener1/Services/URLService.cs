@@ -8,7 +8,8 @@ namespace URL_Shortener1.Services
     public interface IURLService
     {
         Task<URL> ShortenUrlAsync(string longUrl, string userId);
-        Task<IEnumerable<URL>> GetUserUrlsAsync(string userId);
+        IEnumerable<URL> GetUserUrls(string userId);
+        IEnumerable<URL> GetUrls();
     }
 
     public class URLService : IURLService
@@ -20,9 +21,14 @@ namespace URL_Shortener1.Services
             _dbContext = dbContext; 
         }
 
-        public async Task<IEnumerable<URL>> GetUserUrlsAsync(string userId)
+        public IEnumerable<URL> GetUrls()
         {
-            return await _dbContext.URLs.Where(user => user.UserId.ToString() == userId).ToListAsync();
+            return _dbContext.URLs.ToList();
+        }
+
+        public IEnumerable<URL> GetUserUrls(string userId)
+        {
+            return _dbContext.URLs.Where(user => user.UserId.ToString() == userId).ToList();
         }
 
         public async Task<URL> ShortenUrlAsync(string longUrl, string userId)
