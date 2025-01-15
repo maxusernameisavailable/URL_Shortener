@@ -17,7 +17,7 @@ namespace URL_Shortener1.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult Login()
         {
             return View(new LoginViewModel());

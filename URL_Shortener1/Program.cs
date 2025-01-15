@@ -9,33 +9,33 @@ var connectionString = builder.Configuration.GetConnectionString("DBConnect");
 
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql(connectionString));
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
-var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
 if (!await roleManager.RoleExistsAsync("Admin"))
 {
-    await roleManager.CreateAsync(new IdentityRole("Admin"));
+    await roleManager.CreateAsync(new Role { Name = "Admin" });
 }
 
 if (!await roleManager.RoleExistsAsync("User"))
 {
-    await roleManager.CreateAsync(new IdentityRole("User"));
+    await roleManager.CreateAsync(new Role { Name = "User" });
 }
 
-var adminEmail = "maxlyhva@gmail.com";
-var adminUser = await userManager.FindByEmailAsync(adminEmail);
+var adminName = "Admin";
+var adminUser = await userManager.FindByNameAsync(adminName);
 
 if (adminUser == null)
 {
-    adminUser = new User { UserName = "Admin", Email = adminEmail };
-    await userManager.CreateAsync(adminUser);
+    adminUser = new User { UserName = adminName };
+    await userManager.CreateAsync(adminUser, "1234");
     await userManager.AddToRoleAsync(adminUser, "Admin");
 }
 
