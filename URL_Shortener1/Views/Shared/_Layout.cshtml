@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - URL_Shortener1</title>
+    <title>@ViewData["Title"] - URL Shortener</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/URL_Shortener1.styles.css" asp-append-version="true" />
@@ -19,29 +19,27 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-               
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form method="post" asp-action="Logout" asp-controller="Account" class="d-inline">
+                                <button type="submit" class="btn btn-primary ms-3">Logout</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <li class="d-inline ms-3">
+                                <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
+                            </li>
+                            <li class="d-inline ms-3">
+                                <a href="@Url.Action("Register", "Account")" class="btn btn-primary">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
-
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <form method="post" asp-action="Logout" asp-controller="Account">
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                }
-                else
-                {
-                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
-                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-                }
+               
             </div>
         </nav>
     </header>
@@ -53,7 +51,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - URL_Shortener1 - <a asp-controller="ShortURLsTable" asp-action="AboutView">About</a>
+            &copy; 2025 - URL Shortener - <a asp-controller="ShortURLsTable" asp-action="AboutView">About</a>
         </div>
     </footer>
 

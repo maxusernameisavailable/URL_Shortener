@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Reflection.Metadata.Ecma335;
 using URL_Shortener1.DBContext;
 using URL_Shortener1.Models;
 
@@ -33,6 +32,12 @@ namespace URL_Shortener1.Services
 
         public async Task<URL> ShortenUrlAsync(string longUrl, string userId)
         {
+            var check = _dbContext.URLs.FirstOrDefault(url => url.OriginalUrl == longUrl);
+            if (check != null)
+            {
+                return check;
+            }
+
             var shortenUrl = GenerateShortUrlAsync(longUrl);
 
             var url = new URL

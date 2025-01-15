@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<URL_Shortener1.Models.URL>
 
-<h1>View</h1>
+<h1>List of URLs</h1>
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -8,7 +8,7 @@
         <input type="text" name="LongUrl" id="longUrl" placeholder="Введіть URL" required />
         <button type="submit">Скоротити</button>
     </form>
-    <p id="message" style="color: red; display: none;">URL не може бути порожнім.</p>
+    <p id="message" style="color: red; display: none;">URL не може бути порожнім.</p>  //noneed
 }
 
 <table class="table">
@@ -42,9 +42,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                           <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                           <a asp-controller="ShortURLsTable" asp-action="ShortURLInfoView" asp-route-id="@item.Id">Details</a> |
+                                       <a asp-controller="ShortURLsTable" asp-action="DeleteURLInfo" asp-route-id="@item.Id">Delete</a>
                         </td>
                     }
                 </tr>
