@@ -19,16 +19,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                @if (User.Identity.IsAuthenticated) {
-                    <form method="post" asp-action="Logout" asp-controller="Account">
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                }
-                else
-                {
-                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
-                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-                }
+               
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -39,6 +30,18 @@
                         </li>
                     </ul>
                 </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form method="post" asp-action="Logout" asp-controller="Account">
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                }
             </div>
         </nav>
     </header>
