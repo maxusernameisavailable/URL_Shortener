@@ -2,7 +2,7 @@
 
 namespace URL_Shortener1.ViewModels
 {
-    public class LoginViewModel
+    public class RegisterViewModel
     {
         [Required]
         public string? Username { get; set; }

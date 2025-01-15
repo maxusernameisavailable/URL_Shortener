@@ -13,9 +13,16 @@ builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+    options.SignIn.RequireConfirmedAccount = false;
+});
+
 var app = builder.Build();
 
-var scope = app.Services.CreateScope();
+/*var scope = app.Services.CreateScope();
 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
@@ -30,14 +37,25 @@ if (!await roleManager.RoleExistsAsync("User"))
 }
 
 var adminName = "Admin";
+var adminRole = "Admin";
 var adminUser = await userManager.FindByNameAsync(adminName);
 
 if (adminUser == null)
 {
-    adminUser = new User { UserName = adminName };
+    adminUser = new User { UserName = adminName, SecurityStamp = Guid.NewGuid().ToString() };
     await userManager.CreateAsync(adminUser, "1234");
-    await userManager.AddToRoleAsync(adminUser, "Admin");
-}
+
+    //adminUser.SecurityStamp = Guid.NewGuid().ToString();
+    //await userManager.UpdateAsync(adminUser);
+
+    await userManager.AddToRoleAsync(adminUser, adminRole);
+} else
+{
+    if (!await userManager.IsInRoleAsync(adminUser, adminRole))
+    {
+        await userManager.AddToRoleAsync(adminUser, adminRole);
+    }
+}*/
 
 if (!app.Environment.IsDevelopment())
 {
