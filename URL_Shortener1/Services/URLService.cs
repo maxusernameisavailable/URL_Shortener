@@ -35,7 +35,7 @@ namespace URL_Shortener1.Services
             var check = _dbContext.URLs.FirstOrDefault(url => url.OriginalUrl == longUrl);
             if (check != null)
             {
-                return check;
+                return null;
             }
 
             var shortenUrl = GenerateShortUrlAsync(longUrl);

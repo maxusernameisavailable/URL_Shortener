@@ -8,7 +8,18 @@
         <input type="text" name="LongUrl" id="longUrl" placeholder="Введіть URL" required />
         <button type="submit">Скоротити</button>
     </form>
-    <p id="message" style="color: red; display: none;">URL не може бути порожнім.</p>  //noneed
+    <p id="message" style="color: red; display: none;">URL не може бути порожнім.</p>
+    //noneed
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+                <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                            <p>@error.ErrorMessage</p>
+            }
+                </div>
+    }
 }
 
 <table class="table">

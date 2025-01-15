@@ -29,7 +29,9 @@ namespace URL_Shortener1.Controllers
             {
                 var userId = _userManager.GetUserId(User);
                 var userUrls = _urlService.GetUserUrls(userId);
-                return View(userUrls);
+                var anonymousUrls = _urlService.GetUrls().Except(userUrls);
+                var concat = userUrls.Concat(anonymousUrls);
+                return View(concat);
             }
 
             var urls = _urlService.GetUrls();
@@ -49,7 +51,12 @@ namespace URL_Shortener1.Controllers
             {
                 var userId = _userManager.GetUserId(User);
                 var url = await _urlService.ShortenUrlAsync(model.LongUrl, userId);
-                return RedirectToAction("ShortURLsTableView", "ShortURLsTable");
+                if (url is null)
+                {
+                    ModelState.AddModelError(string.Empty, "The provided URL already exists");
+                    
+                }
+                return View("ShortURLsTableView", _urlService.GetUserUrls(userId));
             }
 
             return View("ShortURLsTableView");
