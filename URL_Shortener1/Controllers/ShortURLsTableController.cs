@@ -28,9 +28,8 @@ namespace URL_Shortener1.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var userId = _userManager.GetUserId(User);
-                var userUrls = _urlService.GetUserUrls(userId);
-                var anonymousUrls = _urlService.GetUrls().Except(userUrls);
-                var concat = userUrls.Concat(anonymousUrls);
+                ViewBag.UserId = userId;
+                var concat = _urlService.GetUserUrls(userId).Concat(_urlService.GetUrls()).Distinct();
                 return View(concat);
             }
 
@@ -47,19 +46,15 @@ namespace URL_Shortener1.Controllers
         [Authorize]
         public async Task<IActionResult> ShortenUrl(UrlViewModel model)
         {
-            if (ModelState.IsValid)
+            var userId = _userManager.GetUserId(User);
+            ViewBag.UserId = userId;
+            var url = await _urlService.ShortenUrlAsync(model.LongUrl, userId);
+            if (url is null)
             {
-                var userId = _userManager.GetUserId(User);
-                var url = await _urlService.ShortenUrlAsync(model.LongUrl, userId);
-                if (url is null)
-                {
-                    ModelState.AddModelError(string.Empty, "The provided URL already exists");
-                    
-                }
-                return View("ShortURLsTableView", _urlService.GetUserUrls(userId));
+                ModelState.AddModelError(string.Empty, "The provided URL already exists");
             }
-
-            return View("ShortURLsTableView");
+            var concat = _urlService.GetUserUrls(userId).Concat(_urlService.GetUrls()).Distinct();
+            return View("ShortURLsTableView", concat);
         }
 
         [HttpGet]
