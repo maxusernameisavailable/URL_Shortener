@@ -2,7 +2,17 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    <p>
-    asssssssssssssssssssss
-    </p>
+    <h1>About</h1>
+    <h2>Instruction for Url shortener</h2>
+    <hr />
+    <p>asdfghjkl</p>
+
+    <form asp-action="ShortURLsTableView" method="get">
+        <button type="submit" class="btn btn-primary ms-auto">Submit</button>
+    </form>
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <button type="button" class="btn btn-primary ms-auto">Edit</button>
+    }
 }

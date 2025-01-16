@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using URL_Shortener1.DBContext;
 using URL_Shortener1.Models;
@@ -25,7 +26,7 @@ builder.Services.AddScoped<IURLService, URLService>();
 
 var app = builder.Build();
 
-/*var scope = app.Services.CreateScope();
+var scope = app.Services.CreateScope();
 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
@@ -46,19 +47,27 @@ var adminUser = await userManager.FindByNameAsync(adminName);
 if (adminUser == null)
 {
     adminUser = new User { UserName = adminName, SecurityStamp = Guid.NewGuid().ToString() };
-    await userManager.CreateAsync(adminUser, "1234");
+    var res = await userManager.CreateAsync(adminUser, "1234As!");
 
-    //adminUser.SecurityStamp = Guid.NewGuid().ToString();
-    //await userManager.UpdateAsync(adminUser);
-
-    await userManager.AddToRoleAsync(adminUser, adminRole);
-} else
+    if (res.Succeeded)
+    {
+        await userManager.AddToRoleAsync(adminUser, adminRole);
+    }
+    else
+    {
+        foreach (var error in res.Errors)
+        {
+            Console.WriteLine(error.Description);
+        }
+    }
+}
+else
 {
     if (!await userManager.IsInRoleAsync(adminUser, adminRole))
     {
         await userManager.AddToRoleAsync(adminUser, adminRole);
     }
-}*/
+}
 
 if (!app.Environment.IsDevelopment())
 {
