@@ -86,14 +86,14 @@ namespace URL_Shortener1.Services
                 byte[] shortenedHashbytes = new byte[8];
                 Array.Copy(hashbytes, shortenedHashbytes, 6);
 
-                ulong decimalVal = BitConverter.ToUInt64(shortenedHashbytes, 0);
-                string shortUrl = ToBase64(decimalVal);
+                long decimalVal = BitConverter.ToInt64(shortenedHashbytes, 0);
+                string shortUrl = ToBase62(decimalVal);
 
                 return $"https://localhost:7218/Shorten/{shortUrl}";
             }
         }
 
-        private string ToBase64(ulong value)
+        private string ToBase62(long value)
         {
             const string base62Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             StringBuilder sb = new StringBuilder();
