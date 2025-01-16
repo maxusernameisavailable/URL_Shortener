@@ -1,4 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Security.Cryptography;
+using System.Text;
 using URL_Shortener1.DBContext;
 using URL_Shortener1.Models;
 
@@ -10,6 +12,7 @@ namespace URL_Shortener1.Services
         IEnumerable<URL> GetUserUrls(string userId);
         IEnumerable<URL> GetUrls();
         Task DeleteAllAsync();
+        string GetLongUrl(string shortUrl);
     }
 
     public class URLService : IURLService
@@ -29,6 +32,16 @@ namespace URL_Shortener1.Services
                 _dbContext.URLs.Remove(url);
             }
             await _dbContext.SaveChangesAsync();
+        }
+
+        public string GetLongUrl(string key)
+        {
+            var url = _dbContext.URLs.FirstOrDefault(u => u.OriginalUrl.EndsWith($"/{key}"));
+            if (url != null)
+            {
+                return url.OriginalUrl;
+            }
+            return string.Empty;
         }
 
         public IEnumerable<URL> GetUrls()
@@ -54,7 +67,7 @@ namespace URL_Shortener1.Services
             var url = new URL
             {
                 OriginalUrl = longUrl,
-                ShortenedUrl = shortenUrl.Result,
+                ShortenedUrl = shortenUrl,
                 UserId = Int32.Parse(userId),
                 CreatedDate = DateTime.UtcNow
             };
@@ -65,9 +78,34 @@ namespace URL_Shortener1.Services
             return url;
         }
 
-        private async Task<string> GenerateShortUrlAsync(string longUrl) //logic
+        private string GenerateShortUrlAsync(string longUrl) 
         {
-            return Guid.NewGuid().ToString().Substring(0, 8);
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] hashbytes = md5.ComputeHash(Encoding.UTF8.GetBytes(longUrl));
+
+                byte[] shortenedHashbytes = new byte[8];
+                Array.Copy(hashbytes, shortenedHashbytes, 6);
+
+                ulong decimalVal = BitConverter.ToUInt64(shortenedHashbytes, 0);
+                string shortUrl = ToBase64(decimalVal);
+
+                return $"https://localhost:7218/Shorten/{shortUrl}";
+            }
+        }
+
+        private string ToBase64(ulong value)
+        {
+            const string base62Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            StringBuilder sb = new StringBuilder();
+
+            while (value > 0)
+            {
+                sb.Insert(0, base62Chars[(int)(value % 62)]);
+                value /= 62;
+            }
+
+            return sb.ToString();
         }
     }
 }
