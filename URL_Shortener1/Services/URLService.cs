@@ -9,6 +9,7 @@ namespace URL_Shortener1.Services
         Task<URL> ShortenUrlAsync(string longUrl, string userId);
         IEnumerable<URL> GetUserUrls(string userId);
         IEnumerable<URL> GetUrls();
+        Task DeleteAllAsync();
     }
 
     public class URLService : IURLService
@@ -18,6 +19,16 @@ namespace URL_Shortener1.Services
         public URLService(ApplicationDBContext dbContext) 
         { 
             _dbContext = dbContext; 
+        }
+
+        public async Task DeleteAllAsync()
+        {
+            var urls = await _dbContext.URLs.ToListAsync();
+            foreach (var url in urls)
+            {
+                _dbContext.URLs.Remove(url);
+            }
+            await _dbContext.SaveChangesAsync();
         }
 
         public IEnumerable<URL> GetUrls()

@@ -26,6 +26,8 @@ builder.Services.AddScoped<IURLService, URLService>();
 
 var app = builder.Build();
 
+
+// created services to manually add Admin to the system
 var scope = app.Services.CreateScope();
 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -47,19 +49,7 @@ var adminUser = await userManager.FindByNameAsync(adminName);
 if (adminUser == null)
 {
     adminUser = new User { UserName = adminName, SecurityStamp = Guid.NewGuid().ToString() };
-    var res = await userManager.CreateAsync(adminUser, "1234As!");
-
-    if (res.Succeeded)
-    {
-        await userManager.AddToRoleAsync(adminUser, adminRole);
-    }
-    else
-    {
-        foreach (var error in res.Errors)
-        {
-            Console.WriteLine(error.Description);
-        }
-    }
+    await userManager.CreateAsync(adminUser, "1234As!");
 }
 else
 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Data.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,5 +79,14 @@ namespace URL_Shortener1.Controllers
             }
             return View();
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteAllRecords()
+        {
+            _dbContext.SaveChanges();
+            return View("ShortURLsTableView", _urlService.GetUrls());
+        }
+        
     }
 }

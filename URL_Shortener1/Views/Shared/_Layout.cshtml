@@ -27,6 +27,13 @@
                             <form method="post" asp-action="Logout" asp-controller="Account" class="d-inline">
                                 <button type="submit" class="btn btn-primary ms-3">Logout</button>
                             </form>
+
+                            if(User.IsInRole("Admin"))
+                            {
+                                <form method="post" asp-action="DeleteAllRecords" asp-controller="ShortURLsTable" class="d-inline">
+                                    <button type="button" class="btn btn-danger ms-3">Delete all</button>
+                                </form>
+                            }
                         }
                         else
                         {

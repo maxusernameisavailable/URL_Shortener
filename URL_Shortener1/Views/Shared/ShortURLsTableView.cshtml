@@ -5,11 +5,9 @@
 @if (User.Identity.IsAuthenticated)
 {
     <form asp-action="ShortenUrl" method="post">
-        <input type="text" name="LongUrl" id="longUrl" placeholder="Inout URL" required />
+        <input type="text" name="LongUrl" id="longUrl" placeholder="Input URL" required />
         <button type="submit">Shorten</button>
     </form>
-    //<p id="message" style="color: red; display: none;">URL не може бути порожнім.</p>
-    //noneed
 
     @if (!ViewData.ModelState.IsValid)
     {
@@ -31,7 +29,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.ShortenedUrl)
             </th>
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated || User.IsInRole("Admin"))
             {
                 <th>
                     Actions
@@ -51,7 +49,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ShortenedUrl)
                     </td>
-                    @if (User.Identity.IsAuthenticated && item.UserId.ToString() == userId)
+                    @if (User.Identity.IsAuthenticated && item.UserId.ToString() == userId || User.IsInRole("Admin"))
                     {
                         <td>
                            <a asp-controller="ShortURLsTable" asp-action="ShortURLInfoView" asp-route-id="@item.Id">Details</a> |
