@@ -81,9 +81,9 @@ namespace URL_Shortener1.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteAllRecords()
+        public async Task<IActionResult> DeleteAllRecords()
         {
-            _dbContext.SaveChanges();
+            await _urlService.DeleteAllAsync();
             return View("ShortURLsTableView", _urlService.GetUrls());
         }
         

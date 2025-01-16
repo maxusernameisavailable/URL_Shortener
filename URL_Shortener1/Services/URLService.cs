@@ -26,17 +26,16 @@ namespace URL_Shortener1.Services
 
         public async Task DeleteAllAsync()
         {
-            var urls = await _dbContext.URLs.ToListAsync();
-            foreach (var url in urls)
-            {
-                _dbContext.URLs.Remove(url);
-            }
+            var urls = _dbContext.URLs.AsQueryable();
+
+            _dbContext.URLs.RemoveRange(urls);
+
             await _dbContext.SaveChangesAsync();
         }
 
         public string GetLongUrl(string key)
         {
-            var url = _dbContext.URLs.FirstOrDefault(u => u.OriginalUrl.EndsWith($"/{key}"));
+            var url = _dbContext.URLs.FirstOrDefault(u => u.ShortenedUrl.EndsWith($"{key}"));
             if (url != null)
             {
                 return url.OriginalUrl;

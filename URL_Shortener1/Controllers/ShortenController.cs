@@ -13,7 +13,7 @@ namespace URL_Shortener1.Controllers
             _urlService = uRLService;
         }
 
-        [Route("shorten/{key}")]
+        [Route("Shorten/{key}")]
         [HttpGet]
         public IActionResult sh(string key)
         {
